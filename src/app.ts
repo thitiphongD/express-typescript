@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import logger from "morgan";
 import cors from "cors";
 import { healthCheckRoutes } from "./modules/healthcheck/healthcheck.route";
+import { userRoutes } from "./modules/user/user.route";
 import { sequelize } from "./configs/sequelize-config";
 dotenv.config();
 
@@ -13,6 +14,9 @@ const initialize = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connected to the database");
+    sequelize.sync({ force: false }).then(() => {
+      console.log("Database and tables synced!");
+    });
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
@@ -26,6 +30,7 @@ app.use(logger("dev"));
 app.use(cors());
 
 healthCheckRoutes(app);
+userRoutes(app);
 
 // Error recovery middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
