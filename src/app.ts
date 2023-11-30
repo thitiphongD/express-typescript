@@ -4,6 +4,7 @@ import logger from "morgan";
 import cors from "cors";
 import { healthCheckRoutes } from "./modules/healthcheck/healthcheck.route";
 import { userRoutes } from "./modules/user/user.route";
+import { shortLinkRoutes } from "./modules/shortlink/shortlink.route";
 import { sequelize } from "./configs/sequelize-config";
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(cors());
 
 healthCheckRoutes(app);
 userRoutes(app);
+shortLinkRoutes(app);
 
 // Error recovery middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
