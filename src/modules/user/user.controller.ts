@@ -1,15 +1,20 @@
 import { Request, Response } from "express";
 import { ValidationError } from "sequelize";
 import User from "../../models/user.model";
+import jwt from "jsonwebtoken";
 
 export class CreateUser {
   static async create(req: Request, res: Response): Promise<Response> {
     try {
       const { username, email } = req.body;
+      const token = jwt.sign({ email }, "your-secret-key", { expiresIn: "1h" });
+
       const newUser = await User.create({
         username,
         email,
+        token,
       });
+
       return res.status(201).json({
         message: "User created successfully",
         user: newUser,

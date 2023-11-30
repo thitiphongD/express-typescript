@@ -20,6 +20,10 @@ User.init(
       allowNull: false,
       unique: true,
     },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,
