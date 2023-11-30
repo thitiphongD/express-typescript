@@ -23,10 +23,12 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@types/uuid": "^9.0.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.5",
-    "sequelize": "^6.35.1"
+    "sequelize": "^6.35.1",
+    "uuid": "^9.0.1"
   }
 }
