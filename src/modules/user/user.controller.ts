@@ -70,3 +70,67 @@ export class GetUser {
     }
   }
 }
+
+export class EditUser {
+  static async edit(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = req.params.id;
+      const { username, email } = req.body;
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+      if (!username || !email) {
+        return res.status(400).json({
+          message: "Username and email cannot be empty",
+        });
+      }
+      await user.update({
+        username,
+        email,
+      });
+      return res.status(200).json({
+        message: "Update User Success",
+        user: user,
+      });
+    } catch (error) {
+      if (
+        error instanceof ValidationError &&
+        error.errors[0]?.type === "unique violation"
+      ) {
+        return res.status(400).json({
+          message: "Email already exists for another user",
+        });
+      }
+      console.error("Error updating user:", error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  }
+}
+
+export class DeleteUser {
+  static async destroy(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = req.params.id;
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+      await user.destroy();
+      return res.status(200).json({
+        message: "User deleted successfully",
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  }
+}
