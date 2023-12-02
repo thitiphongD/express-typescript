@@ -7,21 +7,23 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers["authorization"];
+  const authorizationHeader = req.get("Authorization");
 
-  if (!token) {
+  if (!authorizationHeader) {
     return res
       .status(401)
       .json({ message: "Unauthorized: Token not provided" });
   }
 
-  try {
-    const decodedToken = jwt.verify(token as string, "your-secret-key") as {
-      userId: string;
-    };
-    console.log("Decoded Token:", decodedToken);
+  const token = authorizationHeader.replace(/^Bearer\s/, "");
 
-    const user = await User.findOne({ where: { id: decodedToken.userId } });
+  try {
+    const decodedToken = jwt.verify(token, "your-secret-key") as {
+      id: string;
+    };
+    // console.log("Decoded Token:", decodedToken);
+
+    const user = await User.findOne({ where: { id: decodedToken.id } });
 
     if (!user) {
       return res.status(403).json({ message: "Forbidden: Invalid token 2" });
@@ -30,8 +32,6 @@ export const authenticate = async (
     req.user = user;
     next();
   } catch (err) {
-    console.error("Token verification error:", err);
-    console.log("Provided Token:", token);
     return res
       .status(403)
       .json({ message: "Forbidden: Invalid token from catch error" });
