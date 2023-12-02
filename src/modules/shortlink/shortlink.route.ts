@@ -1,7 +1,9 @@
 import { Express } from "express";
-import { ShortLink } from "./shortlink.controller";
+import { CreateShortLink, GetAllLinks, GetLink } from "./shortlink.controller";
 import { authenticate } from "../../middlewares/auth.middleware";
 
 export const shortLinkRoutes = (app: Express) => {
-  app.post("/short", authenticate, ShortLink.short);
+  app.get("/links", GetAllLinks.show);
+  app.get("/link/:id", GetLink.show);
+  app.post("/short", authenticate, CreateShortLink.short);
 };

@@ -22,10 +22,10 @@ ShortLink.init(
       allowNull: false,
       unique: true,
     },
-    qr_code: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+    // qr_code: {
+    //   type: DataTypes.TEXT,
+    //   allowNull: true,
+    // },
     icon: {
       type: DataTypes.STRING,
       allowNull: true,
